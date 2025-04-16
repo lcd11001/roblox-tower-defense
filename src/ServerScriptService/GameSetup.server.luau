@@ -1,15 +1,15 @@
 -- spawn a zombie from prefabs
 local function spawnZombie()
-    local zombiePrefab: Model = game.ServerStorage.Prefabs.DroolingZombie:Clone()
-    local movementScript = game.ServerStorage.Scripts.ZombieMovement:Clone()
+    local zombie: Model = game.ServerStorage.Prefabs.DroolingZombie:Clone()
+    local movementScript:Script = game.ServerStorage.Scripts.ZombieMovement:Clone()
 
     -- attach the movement script to the zombie
-    movementScript.Parent = zombiePrefab
+    movementScript.Parent = zombie
 
     local spawnLocation: Part = game.Workspace.SpawnLocation
-    zombiePrefab:MoveTo(spawnLocation.Position)
+    zombie:PivotTo(CFrame.new(spawnLocation.Position))
 
-    zombiePrefab.Parent = game.Workspace
+    zombie.Parent = game.Workspace
 end
 
 -- spawn a zombie every 5 seconds
