@@ -12,6 +12,15 @@
       "$path": "src/ServerScriptService"
     },
 
+    "ServerStorage": {
+      "Prefabs": {
+        "$path": "src/ServerStorage/Prefabs"
+      },
+      "Scripts": {
+        "$path": "src/ServerStorage/Scripts"
+      }
+    },
+
     "StarterPlayer": {
       "StarterPlayerScripts": {
         "$path": "src/StarterPlayerScripts"

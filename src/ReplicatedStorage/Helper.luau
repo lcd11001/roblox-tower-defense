@@ -22,7 +22,7 @@ local function DetectRoot(root)
 	return nil
 end
 
-local function AttachScript(part, script)
+function Helper.AttachScript(part, script)
 	if part and script then
 		local newScript = script:Clone()
 		newScript.Parent = part
@@ -83,7 +83,7 @@ function Helper.AttachScriptFromPath(partPath, scriptPath)
 	end
 
 	-- attach the script into the part
-	AttachScript(part, script)
+	Helper.AttachScript(part, script)
 end
 
 return Helper
