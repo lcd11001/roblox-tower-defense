@@ -2,6 +2,14 @@ local Mob = {}
 
 local ServerStorage = game:GetService("ServerStorage")
 
+function Mob.SpawnMultiple(name: string, map: Instance, quantity: number, scripts: {string}?)
+    -- print("Spawning " .. quantity .. " " .. name .. " on map " .. map.Name)
+    for _ = 1, quantity do
+        Mob.Spawn(name, map, scripts)
+        task.wait(0.5)
+    end
+end
+
 function Mob.Spawn(name: string, map: Instance, scripts: {string}?)
     -- print("Spawning " .. name .. " on map " .. map.Name)
     local start: Part = map:FindFirstChild("Start")
@@ -13,6 +21,8 @@ function Mob.Spawn(name: string, map: Instance, scripts: {string}?)
     local prefabExists = ServerStorage.Prefabs:FindFirstChild(name)
     if prefabExists then
         local mob: Model = prefabExists:Clone()
+        mob.Name = string.gsub(mob.Name, name, "")
+        
         local startPos: Vector3 = start.Position
         mob:PivotTo(CFrame.new(startPos))
         mob.Parent = game.Workspace
