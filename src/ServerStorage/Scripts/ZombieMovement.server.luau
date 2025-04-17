@@ -1,8 +1,14 @@
-print("ZombieMovement script loaded")
+-- print("ZombieMovement script loaded")
 
 local zombie: Model = script.Parent
 local humanoid: Humanoid = zombie:WaitForChild("Humanoid")
-local waitpoints: {Part} = game.Workspace:WaitForChild("Waypoints"):GetChildren()
+
+local mapName: string = zombie:GetAttribute("Map")
+if not mapName then
+    error("Map attribute not found in zombie model")
+end
+
+local waitpoints: {Part} = game.Workspace:WaitForChild(mapName):WaitForChild("Waypoints"):GetChildren()
 
 -- sort waitpoints by name
 table.sort(waitpoints, function(a: Part, b: Part)
