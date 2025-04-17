@@ -1,9 +1,9 @@
 -- print("ZombieMovement script loaded")
 
-local zombie: Model = script.Parent
-local humanoid: Humanoid = zombie:WaitForChild("Humanoid")
+local model: Model = script.Parent
+local humanoid: Humanoid = model:FindFirstChildOfClass("Humanoid")
 
-local mapName: string = zombie:GetAttribute("Map")
+local mapName: string = model:GetAttribute("Map")
 if not mapName then
     error("Map attribute not found in zombie model")
 end
@@ -31,4 +31,4 @@ another way to do coroutine.wrap
 ]]
 
 -- destroy the zombie after it reaches the last waitpoint
-zombie:Destroy()
+model:Destroy()

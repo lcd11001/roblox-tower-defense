@@ -1,6 +1,7 @@
 local Mob = {}
 
 local ServerStorage = game:GetService("ServerStorage")
+local PhysicsService = game:GetService("PhysicsService")
 
 function Mob.SpawnMultiple(name: string, map: Instance, quantity: number, scripts: {string}?)
     -- print("Spawning " .. quantity .. " " .. name .. " on map " .. map.Name)
@@ -18,14 +19,23 @@ function Mob.Spawn(name: string, map: Instance, scripts: {string}?)
         return
     end
 
+    local  mobParent: Folder = map:FindFirstChild("Mobs")
+
     local prefabExists = ServerStorage.Prefabs:FindFirstChild(name)
     if prefabExists then
         local mob: Model = prefabExists:Clone()
-        mob.Name = string.gsub(mob.Name, name, "")
+        -- mob.Name = string.gsub(mob.Name, name, "")
         
         local startPos: Vector3 = start.Position
         mob:PivotTo(CFrame.new(startPos))
-        mob.Parent = game.Workspace
+        mob.Parent = mobParent ~= nil and mobParent or game.Workspace
+
+        for _, object in ipairs(mob:GetDescendants()) do
+            if object:IsA("BasePart") then
+                -- PhysicsService:SetPartCollisionGroup(object, "Mob")
+                object.CollisionGroup = "Mob"
+            end
+        end
 
         Mob.InitAttributes(mob, map)
         Mob.AttachScripts(mob, scripts)
