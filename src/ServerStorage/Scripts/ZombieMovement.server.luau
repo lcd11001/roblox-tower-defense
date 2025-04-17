@@ -1,11 +1,15 @@
 -- print("ZombieMovement script loaded")
 
 local model: Model = script.Parent
+
 local humanoid: Humanoid = model:FindFirstChildOfClass("Humanoid")
+if not humanoid then
+    error("Humanoid not found in model ".. model.Name)
+end
 
 local mapName: string = model:GetAttribute("Map")
 if not mapName then
-    error("Map attribute not found in zombie model")
+    error("Map attribute not found in model " .. model.Name)
 end
 
 local waitpoints: {Part} = game.Workspace:WaitForChild(mapName):WaitForChild("Waypoints"):GetChildren()

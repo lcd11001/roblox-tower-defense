@@ -1,7 +1,7 @@
 local Mob = {}
 
 local ServerStorage = game:GetService("ServerStorage")
-local PhysicsService = game:GetService("PhysicsService")
+-- local PhysicsService = game:GetService("PhysicsService")
 
 function Mob.SpawnMultiple(name: string, map: Instance, quantity: number, scripts: {string}?)
     -- print("Spawning " .. quantity .. " " .. name .. " on map " .. map.Name)
