@@ -1,6 +1,6 @@
 -- spawn a zombie from prefabs
 local function spawnZombie()
-    local zombie: Model = game.ServerStorage.Prefabs.DroolingZombie:Clone()
+    local zombie: Model = game.ServerStorage.Prefabs.Zombie:Clone()
     local movementScript:Script = game.ServerStorage.Scripts.ZombieMovement:Clone()
 
     -- attach the movement script to the zombie
