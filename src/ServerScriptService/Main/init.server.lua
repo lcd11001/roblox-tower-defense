@@ -3,5 +3,9 @@
 
 local Mob = require(script.Mob)
 local Map = workspace:WaitForChild("Grassland Map")
-Mob.Spawn("Zombie", Map, {"ZombieMovement"})
+
+for _ = 1, 3 do
+    Mob.Spawn("Zombie", Map, {"ZombieMovement"})
+    task.wait(3)
+end
 

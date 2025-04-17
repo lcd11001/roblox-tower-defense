@@ -24,3 +24,11 @@ for index=1, #waitpoints do
         humanoid.MoveToFinished:Wait()
     end
 end
+
+--[[
+https://youtu.be/R3AREWh14iQ?si=sRqXVPcvaXQogAsC&t=733
+another way to do coroutine.wrap
+]]
+
+-- destroy the zombie after it reaches the last waitpoint
+zombie:Destroy()
