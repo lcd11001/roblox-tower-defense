@@ -26,7 +26,11 @@ local function CreateAnimationMob(model)
 		return
 	end
 
+    task.wait(0.1) -- Wait for the model to be fully loaded
+
 	local walkTrack: AnimationTrack = animator:LoadAnimation(walkAnimation)
+    walkTrack.Looped = true
+    walkTrack.Priority = Enum.AnimationPriority.Movement
     walkTrack:Play()
 end
 
