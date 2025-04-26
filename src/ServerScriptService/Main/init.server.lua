@@ -2,19 +2,24 @@
 -- init.server.lua will change its parent directory into a Script instance.
 
 local Mob = require(script.Mob)
-local Map = workspace:WaitForChild("Grassland Map")
-local Mobs = Map:WaitForChild("Mobs")
+
+local mapName: string = "Grassland Map"
+local Map = workspace:WaitForChild(mapName)
+
+-- local Mobs = Map:WaitForChild("Mobs")
+local Mobs = workspace:WaitForChild("Mobs")
 local MobWaveTime = 3
 local MobWaveTotal = 5
 local MobNames = { "Zombie", "Noob", "MechCannon", "Dracula" }
 
 -- spawn waves of zombies
 for wave = 1, MobWaveTotal do
-	local mobName = wave ~= MobWaveTotal and MobNames[math.random(1, #MobNames - 1)] or MobNames[#MobNames]
-	-- local mobName = MobNames[3]
-	print("Spawning wave " .. wave .. " : " .. mobName)
+	print("Spawning wave " .. wave)
 	-- print("Mob name: " .. mobName)
-	Mob.SpawnMultiple(mobName, Map, 3 * wave, { "ZombieMovement", "ZombieAnimation" })
+	Mob.SpawnMultiple(MobNames, Map, 3 * wave, { "ZombieMovement" })
+	-- Mob.SpawnMultiple(MobNames, Map, 3 * wave, { "ZombieMovement", "ZombieAnimation" })
+
+	-- local mobName = MobNames[math.random(1, #MobNames)]
 	-- Mob.Spawn(mobName, Map, { "ZombieMovement", "ZombieAnimation" })
 
 	repeat
