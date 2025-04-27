@@ -1,9 +1,10 @@
 local Mob = {}
+local totalMob = 0
 
 local ServerStorage = game:GetService("ServerStorage")
 -- local PhysicsService = game:GetService("PhysicsService")
 
-function Mob.SpawnMultiple(names: {string}, map: Instance, quantity: number, scripts: {string}?)
+function Mob.SpawnMultiple(names: { string }, map: Instance, quantity: number, scripts: { string }?)
     -- print("Spawning " .. quantity .. " " .. name .. " on map " .. map.Name)
     for _ = 1, quantity do
         local name: string = names[math.random(1, #names)]
@@ -12,7 +13,7 @@ function Mob.SpawnMultiple(names: {string}, map: Instance, quantity: number, scr
     end
 end
 
-function Mob.Spawn(name: string, map: Instance, scripts: {string}?)
+function Mob.Spawn(name: string, map: Instance, scripts: { string }?)
     -- print("Spawning " .. name .. " on map " .. map.Name)
     local start: Part = map:FindFirstChild("Start")
     if not start then
@@ -26,8 +27,17 @@ function Mob.Spawn(name: string, map: Instance, scripts: {string}?)
     local prefabExists = ServerStorage.Prefabs:FindFirstChild(name)
     if prefabExists then
         local mob: Model = prefabExists:Clone()
-        -- mob.Name = string.gsub(mob.Name, name, "")
-        
+        totalMob += 1
+        -- set model name in workspace
+        mob.Name = mob.Name .. "_" .. tostring(totalMob)
+
+        -- set model name in view
+        local humanoid: Humanoid = mob:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.DisplayName = string.gsub(mob.Name, "_", " ")
+            humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.Viewer
+        end
+
         local startPos: Vector3 = start.Position
         mob:PivotTo(CFrame.new(startPos))
         mob.Parent = mobParent ~= nil and mobParent or game.Workspace
@@ -43,12 +53,13 @@ function Mob.Spawn(name: string, map: Instance, scripts: {string}?)
 
         Mob.InitAttributes(mob, map)
         Mob.AttachScripts(mob, scripts)
+        Mob.RegisterEvents(mob)
     else
         warn("Prefab " .. name .. " does not exist in ServerStorage.Prefabs")
     end
 end
 
-function Mob.AttachScripts(mob: Model, scripts: {string}?)
+function Mob.AttachScripts(mob: Model, scripts: { string }?)
     if not scripts then
         return
     end
@@ -67,6 +78,22 @@ end
 function Mob.InitAttributes(mob: Model, map: Instance)
     local mapName: string = map.Name
     mob:SetAttribute("Map", mapName)
+end
+
+function Mob.RegisterEvents(mob: Model)
+    local humanoid: Humanoid = mob:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        humanoid.Died:Connect(function()
+            Mob.OnMobDied(mob)
+        end)
+    else
+        warn("Humanoid not found in model " .. mob.Name)
+    end
+end
+
+function Mob.OnMobDied(mob: Model)
+    task.wait(1) -- Wait for the death animation to play
+    mob:Destroy()
 end
 
 return Mob
