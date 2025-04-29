@@ -1,8 +1,9 @@
 local Mob = {}
 local totalMob = 0
 
-local ServerStorage = game:GetService("ServerStorage")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 -- local PhysicsService = game:GetService("PhysicsService")
+local ServerStorage = game:GetService("ServerStorage")
 
 function Mob.SpawnMultiple(names: { string }, map: Instance, quantity: number, scripts: { string }?)
     -- print("Spawning " .. quantity .. " " .. name .. " on map " .. map.Name)
@@ -24,7 +25,7 @@ function Mob.Spawn(name: string, map: Instance, scripts: { string }?)
     -- local mobParent: Folder = map:FindFirstChild("Mobs")
     local mobParent: Folder = workspace:FindFirstChild("Mobs")
 
-    local prefabExists = ServerStorage.Prefabs:FindFirstChild(name)
+    local prefabExists = ReplicatedStorage.Prefabs:FindFirstChild(name)
     if prefabExists then
         local mob: Model = prefabExists:Clone()
         totalMob += 1
