@@ -16,6 +16,13 @@
       "$path": "src/ServerStorage"
     },
 
+    "StarterGui": {
+      "$className": "StarterGui",
+      "GameGui": {
+        "$path": "src/StarterGui/GameGui"
+      }
+    },
+
     "StarterPlayer": {
       "$className": "StarterPlayer",
       "StarterPlayerScripts": {
