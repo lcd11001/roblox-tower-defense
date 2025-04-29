@@ -1,4 +1,4 @@
--- print("ZombieMovement script loaded")
+-- print("Movement script loaded")
 
 local model: Model = script.Parent
 

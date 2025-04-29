@@ -4,7 +4,7 @@ local WaveConfig = {}
 WaveConfig.GlobalSettings = {
 	TimeBetweenWaves = 3, -- Default time in seconds after a wave is cleared
 	TimeBetweenMobs = 0.5, -- Default time between mobs in seconds
-	DefaultScripts = { "ZombieMovement" }, -- Default scripts to attach if not specified per wave
+	DefaultScripts = { "Movement" }, -- Default scripts to attach if not specified per wave
 	-- Add other global settings if needed (e.g., default spawn location tag)
 }
 
@@ -16,7 +16,7 @@ WaveConfig.Waves = {
 		SpawnSequence = {
 			{ Zombie = 3 },
 		},
-		-- Scripts = { "ZombieMovement" } -- Optional: Overrides DefaultScripts if needed
+		-- Scripts = { "Movement" } -- Optional: Overrides DefaultScripts if needed
 		-- TimeBonus = 5, -- Optional: Example of wave-specific data (e.g., time added on clear)
 		Message = "Wave 1: Just Zombies!", -- Optional: Message to display
 	},
@@ -47,7 +47,7 @@ WaveConfig.Waves = {
 			{ MechCannon = 3 },
 			{ Dracula = 1 },
 		},
-		Scripts = { "ZombieMovement" }, -- Example: Explicitly setting scripts (same as default here)
+		Scripts = { "Movement" }, -- Example: Explicitly setting scripts (same as default here)
 	},
 
 	-- Wave 5

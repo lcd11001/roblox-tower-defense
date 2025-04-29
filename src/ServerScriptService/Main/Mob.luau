@@ -66,7 +66,7 @@ function Mob.AttachScripts(mob: Model, scripts: { string }?)
     end
 
     for _, scriptName in ipairs(scripts) do
-        local script: Instance = ServerStorage.Scripts:FindFirstChild(scriptName)
+        local script: Instance = ServerStorage.Mob:FindFirstChild(scriptName)
         if script then
             local newScript: Instance = script:Clone()
             newScript.Parent = mob

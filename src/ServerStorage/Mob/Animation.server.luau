@@ -1,4 +1,4 @@
--- print("ZombieAnimation script loaded")
+-- print("Animation script loaded")
 
 local currentAnim: string = nil
 local currentAnimTrack: AnimationTrack = nil

@@ -13,13 +13,7 @@
     },
 
     "ServerStorage": {
-      "Prefabs": {
-        "$path": "src/ServerStorage/Prefabs",
-        "$className": "Folder"
-      },
-      "Scripts": {
-        "$path": "src/ServerStorage/Scripts"
-      }
+      "$path": "src/ServerStorage"
     },
 
     "StarterPlayer": {

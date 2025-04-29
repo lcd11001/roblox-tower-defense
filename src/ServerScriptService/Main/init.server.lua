@@ -14,7 +14,7 @@ if not WaveConfig.GlobalSettings then
     WaveConfig.GlobalSettings = {
         TimeBetweenWaves = 3,
         TimeBetweenMobs = 0.5,
-        DefaultScripts = { "ZombieMovement" },
+        DefaultScripts = { "Movement" },
     }
 end
 
