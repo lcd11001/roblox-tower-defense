@@ -1,60 +1,40 @@
--- print("GameController script loaded")
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Prefabs = ReplicatedStorage:WaitForChild("Prefabs")
 
-local camera = workspace.CurrentCamera
--- local item = nil
-local highlightingItems = {}
+local TowerItem = require(script.Parent.TowerItem)
 
-local function MouseRaycast(): RaycastResult
-    local mousePosition: Vector2 = UserInputService:GetMouseLocation()
-    -- print("Mouse position:", mousePosition)
+local gui = script.Parent.Parent
+local slingerButton: TextButton = gui:FindFirstChild("SlingerButton", true)
 
-    local ray: Ray = camera:ViewportPointToRay(mousePosition.X, mousePosition.Y)
-    -- print("Ray:", ray)
+local towerFolder: Folder = workspace:FindFirstChild("Towers")
+local towerItem: Model = nil
 
-    local result: RaycastResult = workspace:Raycast(ray.Origin, ray.Direction * 1000)
-    return result
+local function SpawnTower(name: string): Model | nil
+    local tower = Prefabs:FindFirstChild(name)
+    if tower then
+        local clonedTower = tower:Clone()
+        clonedTower.Parent = towerFolder
+
+        return clonedTower
+    else
+        warn("Tower " .. name .. " not found in ServerStorage.Towers")
+    end
+    return nil
 end
 
-local function HighlightPart(part: BasePart)
-    if highlightingItems[part] then
-        -- avoid part keep red color after double click
-        return
+local function AddPlaceholderTower(name: string)
+    towerItem = SpawnTower(name)
+    if towerItem then
+        TowerItem.SetItem(towerItem)
     end
-
-    highlightingItems[part] = true
-
-    local originalColor = part.Color
-    part.Color = Color3.new(1, 0, 0)
-    task.delay(0.5, function()
-        if part.Parent then
-            part.Color = originalColor
-        end
-
-        highlightingItems[part] = nil
-    end)
 end
 
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if not gameProcessed then
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            local result: RaycastResult = MouseRaycast()
-            if result and result.Instance then
-                local item = result.Instance
-                print("Hit object:", item.Name)
-                if item:IsA("BasePart") then
-                    HighlightPart(item)
-                end
-            end
-        end
-    end
+--[[
+• button.Activated fires for both touch taps and mouse clicks on GUI buttons.
+• button.InputBegan fires on every input event (e.g., mouse down, key pressed, etc.).
+To handle both mobile touch and PC left click on a GUI button, simply connect to button.Activated.
+]]
+slingerButton.Activated:Connect(function()
+    -- print("SlingerButton activated")
+    AddPlaceholderTower("Slinger")
 end)
-
--- Connect the function to the RenderStepped event
--- RunService.RenderStepped:Connect(function()
---     local result: RaycastResult = MouseRaycast()
---     if result and result.Instance then
---         print("Hit object:", result.Instance.Name)
---     end
--- end)

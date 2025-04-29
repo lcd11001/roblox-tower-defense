@@ -40,8 +40,6 @@ while true do
         -- print("Target found: " .. target.Name)
         -- Add your attack logic here
         TakeDamage(target)
-    else
-        print("No target found within range.")
     end
 
     task.wait(config.AttackSpeed) -- Adjust the wait time as needed
