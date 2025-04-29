@@ -3,7 +3,8 @@ local TowerConfig = require(ServerScriptService.Configs.TowerConfig)
 
 local config = TowerConfig.GetConfig("1")
 
-local tower: Model = script.Parent
+local Towers: Folder = script.Parent
+local tower: Model = Towers:WaitForChild("Tower")
 
 local mobs = workspace:WaitForChild("Mobs")
 

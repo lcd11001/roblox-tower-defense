@@ -53,6 +53,14 @@
             512
           ]
         }
+      },
+      "Mobs": {
+        "$path": "src/Workspace/Mobs",
+        "$className": "Folder"
+      },
+      "Towers": {
+        "$path": "src/Workspace/Towers",
+        "$className": "Folder"
       }
     },
     "Lighting": {
