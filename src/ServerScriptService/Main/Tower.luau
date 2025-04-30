@@ -10,13 +10,13 @@ local Tower = {}
 
 local towerFolder: Folder = workspace:FindFirstChild("Towers")
 
-function Tower.Spawn(player: Player, name: string, position: Vector3): Model | nil
+function Tower.Spawn(player: Player, name: string, pivot: CFrame): Model | nil
     local tower = Prefabs:FindFirstChild(name)
     if tower then
         local clonedTower: Model = tower:Clone()
         clonedTower.Parent = towerFolder
         clonedTower.HumanoidRootPart:SetNetworkOwner(nil)
-        clonedTower:PivotTo(CFrame.new(position))
+        clonedTower:PivotTo(pivot)
 
         Helper.SetColisionGroup(clonedTower, "Tower", false)
 

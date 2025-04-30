@@ -12,6 +12,7 @@ local highlightingItems = {}
 
 local TowerItem = require(script.Parent.TowerItem)
 local canPlaceTower = false
+local rotationPlaceTower = 0
 
 local function MouseRaycast(blacklist: { Instance }): RaycastResult
     local mousePosition: Vector2 = UserInputService:GetMouseLocation()
@@ -72,7 +73,7 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
 
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             if canPlaceTower then
-                spawnTowerEvent:FireServer(item.Name, item:GetPivot().Position)
+                spawnTowerEvent:FireServer(item.Name, item:GetPivot())
                 -- destroy the placeholder item
                 item:Destroy()
                 TowerItem.SetSpawnItem(nil)
@@ -120,7 +121,6 @@ RunService.RenderStepped:Connect(function()
             y += (extents.Y * 0.5)
         end
 
-        -- item:SetPrimaryPartCFrame(CFrame.new(x, y, z))
-        item:PivotTo(CFrame.new(x, y, z))
+        TowerItem.Perpendicular(Vector3.new(x, y, z))
     end
 end)
