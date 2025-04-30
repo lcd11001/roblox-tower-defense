@@ -15,7 +15,8 @@ local function SpawnTower(name: string): Model | nil
     local tower = Prefabs:FindFirstChild(name)
     if tower then
         local clonedTower = tower:Clone()
-        clonedTower.Parent = towerFolder
+        -- clonedTower.Parent = towerFolder
+        clonedTower.Parent = workspace
 
         return clonedTower
     else
