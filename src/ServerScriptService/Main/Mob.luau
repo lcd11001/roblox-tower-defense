@@ -6,6 +6,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
 local Prefabs = ReplicatedStorage:WaitForChild("Prefabs")
+local Helper = require(ReplicatedStorage:WaitForChild("Helper"))
 
 -- local mobParent: Folder = map:FindFirstChild("Mobs")
 local mobParent: Folder = workspace:FindFirstChild("Mobs")
@@ -47,13 +48,7 @@ function Mob.Spawn(name: string, map: Instance, scripts: { string }?)
         -- avoid glitches when player collides with the mob
         mob.HumanoidRootPart:SetNetworkOwner(nil)
 
-        for _, object in ipairs(mob:GetDescendants()) do
-            if object:IsA("BasePart") then
-                -- PhysicsService:SetPartCollisionGroup(object, "Mob")
-                object.CollisionGroup = "Mob"
-            end
-        end
-
+        Helper.SetColisionGroup(mob, "Mob")
         Mob.InitAttributes(mob, map)
         Mob.AttachScripts(mob, scripts)
         Mob.RegisterEvents(mob)

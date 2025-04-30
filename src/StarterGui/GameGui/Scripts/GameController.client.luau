@@ -1,5 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Prefabs = ReplicatedStorage:WaitForChild("Prefabs")
+local Helper = require(ReplicatedStorage:WaitForChild("Helper"))
 
 local TowerItem = require(script.Parent.TowerItem)
 
@@ -24,6 +25,7 @@ end
 local function AddPlaceholderTower(name: string)
     local towerItem: Model = SpawnTower(name)
     if towerItem then
+        Helper.SetColisionGroup(towerItem, "Tower")
         TowerItem.SetSpawnItem(towerItem)
     end
 end

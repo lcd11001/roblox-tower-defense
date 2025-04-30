@@ -73,15 +73,19 @@ RunService.RenderStepped:Connect(function()
         local y = result.Position.Y
         local z = result.Position.Z
 
-        -- Option 1: Using Humanoid.HipHeight
-        -- local humanoid: Humanoid = item:FindFirstChildOfClass("Humanoid")
-        -- if humanoid then
-        --     y += humanoid.HipHeight
-        -- end
+        local humanoid: Humanoid = item:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            -- Option 1: Using Humanoid.HipHeight
+            y += humanoid.HipHeight
 
-        -- Option 2: Using bounding box (if no Humanoid)
-        local extents = item:GetExtentsSize()
-        y += (extents.Y * 0.5)
+            if item.PrimaryPart then
+                y += item.PrimaryPart.Size.Y * 0.5
+            end
+        else
+            -- Option 2: Using bounding box (if no Humanoid)
+            local extents = item:GetExtentsSize()
+            y += (extents.Y * 0.5)
+        end
 
         -- item:SetPrimaryPartCFrame(CFrame.new(x, y, z))
         item:PivotTo(CFrame.new(x, y, z))

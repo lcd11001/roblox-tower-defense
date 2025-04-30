@@ -5,6 +5,7 @@ local replicatedStorage = game:GetService("ReplicatedStorage") -- Define replica
 local serverStorage = game:GetService("ServerStorage") -- Define serverStorage
 local starterGui = game:GetService("StarterGui") -- Define starterGui
 local starterPack = game:GetService("StarterPack")
+-- local physicsService = game:GetService("PhysicsService") -- Define physicsService
 
 local function DetectRoot(root)
 	if root == "Workspace" then
@@ -84,6 +85,15 @@ function Helper.AttachScriptFromPath(partPath, scriptPath)
 
 	-- attach the script into the part
 	Helper.AttachScript(part, script)
+end
+
+function Helper.SetColisionGroup(model: Model, groupName: string)
+    for _, object in ipairs(model:GetDescendants()) do
+        if object:IsA("BasePart") then
+            -- physicsService:SetPartCollisionGroup(object, groupName)
+            object.CollisionGroup = groupName
+        end
+    end
 end
 
 return Helper
