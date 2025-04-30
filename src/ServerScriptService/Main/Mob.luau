@@ -35,15 +35,24 @@ function Mob.Spawn(name: string, map: Instance, scripts: { string }?)
         -- set model name in workspace
         mob.Name = mob.Name .. "_" .. tostring(totalMob)
 
+        local x, y, z = start.Position.X, start.Position.Y, start.Position.Z
+
         -- set model name in view
         local humanoid: Humanoid = mob:FindFirstChildOfClass("Humanoid")
         if humanoid then
             humanoid.DisplayName = string.gsub(mob.Name, "_", " ")
             humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.Viewer
+
+            -- y += humanoid.HipHeight
+            -- if mob.PrimaryPart then
+            --     y += mob.PrimaryPart.Size.Y * 0.5
+            -- end
+
+            local extents = mob:GetExtentsSize()
+            y += (extents.Y * 0.5)
         end
 
-        local startPos: Vector3 = start.Position
-        mob:PivotTo(CFrame.new(startPos))
+        mob:PivotTo(CFrame.new(x, y, z))
         mob.Parent = mobParent ~= nil and mobParent or game.Workspace
         -- avoid glitches when player collides with the mob
         mob.HumanoidRootPart:SetNetworkOwner(nil)
