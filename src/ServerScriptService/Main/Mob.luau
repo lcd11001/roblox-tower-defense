@@ -63,13 +63,14 @@ function Mob.AttachScripts(mob: Model, scripts: { string }?)
     end
 
     for _, scriptName in ipairs(scripts) do
-        local script: Instance = ServerStorage.Mob:FindFirstChild(scriptName)
-        if script then
-            local newScript: Instance = script:Clone()
-            newScript.Parent = mob
-        else
-            warn("Script " .. scriptName .. " does not exist in ServerStorage.Scripts")
-        end
+        -- local script: Instance = ServerStorage.Mob:FindFirstChild(scriptName)
+        -- if script then
+        --     local newScript: Instance = script:Clone()
+        --     newScript.Parent = mob
+        -- else
+        --     warn("Script " .. scriptName .. " does not exist in ServerStorage.Scripts")
+        -- end
+        Helper.AttachScriptFromStorage(mob, scriptName, ServerStorage.Mob)
     end
 end
 

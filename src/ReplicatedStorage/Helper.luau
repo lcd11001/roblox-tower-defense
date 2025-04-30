@@ -7,7 +7,7 @@ local starterGui = game:GetService("StarterGui") -- Define starterGui
 local starterPack = game:GetService("StarterPack")
 -- local physicsService = game:GetService("PhysicsService") -- Define physicsService
 
-local function DetectRoot(root)
+local function DetectRoot(root: string)
     if root == "Workspace" then
         return workspace -- built-in Roblox global variable
     elseif root == "ReplicatedStorage" then
@@ -23,7 +23,16 @@ local function DetectRoot(root)
     return nil
 end
 
-function Helper.AttachScript(part, script)
+function Helper.AttachScriptFromStorage(part: Instance, scriptName: string, storage: Instance)
+    local script = storage:FindFirstChild(scriptName)
+    if not script then
+        warn("Script " .. scriptName .. " not found in " .. storage.Name)
+        return
+    end
+    Helper.AttachScript(part, script)
+end
+
+function Helper.AttachScript(part: Instance, script: Script)
     if part and script then
         local newScript = script:Clone()
         newScript.Parent = part
@@ -37,7 +46,7 @@ function Helper.AttachScript(part, script)
     end
 end
 
-function Helper.FindObjectByPath(path)
+function Helper.FindObjectByPath(path: string): Instance | nil
     local rootPath = string.match(path, "([^/]+)")
     local current = DetectRoot(rootPath)
     if current == nil then
@@ -54,7 +63,7 @@ function Helper.FindObjectByPath(path)
     return current -- Return the final object if found
 end
 
-function Helper.WaitObjectByPath(path)
+function Helper.WaitObjectByPath(path: string): Instance | nil
     local rootPath = string.match(path, "([^/]+)")
     local current = DetectRoot(rootPath)
     if current == nil then
@@ -68,7 +77,7 @@ function Helper.WaitObjectByPath(path)
     return current
 end
 
-function Helper.AttachScriptFromPath(partPath, scriptPath)
+function Helper.AttachScriptFromPath(partPath: string, scriptPath: string)
     -- find the part
     local part = Helper.FindObjectByPath(partPath)
     if part == nil then
