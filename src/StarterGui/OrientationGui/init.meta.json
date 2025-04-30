@@ -4,6 +4,7 @@
     "properties": {
         "IgnoreGuiInset": true,
         "ResetOnSpawn": false,
+        "DisplayOrder": 999,
         "Enabled": false
     }
 }
