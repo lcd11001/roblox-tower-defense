@@ -68,6 +68,9 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
 
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             spawnTowerEvent:FireServer(item.Name, item:GetPivot().Position)
+            -- destroy the placeholder item
+            item:Destroy()
+            TowerItem.SetSpawnItem(nil)
         end
     end
 end)
