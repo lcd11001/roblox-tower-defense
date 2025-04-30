@@ -62,7 +62,8 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         -- end
 
         local item: Model = TowerItem.GetSpawnItem()
-        if not item then
+        if item == nil then
+            -- print("No item to spawn")
             return
         end
 

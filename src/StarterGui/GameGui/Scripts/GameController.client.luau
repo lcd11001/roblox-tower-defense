@@ -25,6 +25,12 @@ local function SpawnTower(name: string): Model | nil
 end
 
 local function AddPlaceholderTower(name: string)
+    if TowerItem.GetSpawnItem() ~= nil then
+        -- avoid duplicate placeholder towers
+        -- print("placeholder tower already exists")
+        return
+    end
+
     local towerItem: Model = SpawnTower(name)
     if towerItem then
         Helper.SetColisionGroup(towerItem, "Tower", true)
