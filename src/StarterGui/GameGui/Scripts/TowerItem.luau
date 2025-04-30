@@ -15,12 +15,40 @@ end
 
 local function FindClosetPath(): BasePart | nil
     if spawnItem then
+        local spawnItemPos = spawnItem:GetPivot().Position
+
         local closestPath: BasePart = nil
         local closestDistance: number = math.huge
         -- local Paths: { BasePart } = SnappingParts:GetChildren()
         local paths: { BasePart } = Paths:GetChildren()
         for _, path in pairs(paths) do
-            local distance: number = (spawnItem:GetPivot().Position - path.Position).Magnitude
+            -- This fails for long rail segments, because the part's .Position is its center, not the closest point on the rail's surface or axis
+            -- local distance: number = (spawnItem:GetPivot().Position - path.Position).Magnitude
+
+            local pathPos = path.Position
+            local pathCFrame = path.CFrame
+            local pathSize = path.Size
+
+            -- determine direction of long axis
+            local forward
+            local halfLenght
+
+            if pathSize.X > pathSize.Z then
+                forward = pathCFrame.RightVector
+                halfLenght = pathSize.X / 2
+            else
+                forward = pathCFrame.LookVector
+                halfLenght = pathSize.Z / 2
+            end
+
+            -- project spawnItem position onto the path's long axis
+            local toSpawnItem = spawnItemPos - pathPos
+            local dot = math.clamp(toSpawnItem:Dot(forward), -halfLenght, halfLenght)
+            local closestPoint = pathPos + (dot * forward)
+
+            -- measure distance from spawnItem to closest point on path
+            local distance = (spawnItemPos - closestPoint).Magnitude
+
             if distance < closestDistance then
                 closestDistance = distance
                 closestPath = path
