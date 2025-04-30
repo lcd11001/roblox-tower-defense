@@ -1,12 +1,12 @@
 local TowerItem = {}
-local item: Model = nil
+local spawnItem: Model = nil
 
-function TowerItem.SetItem(newItem: Model)
-    item = newItem
+function TowerItem.SetSpawnItem(newItem: Model)
+    spawnItem = newItem
 end
 
-function TowerItem.GetItem(): Model
-    return item
+function TowerItem.GetSpawnItem(): Model
+    return spawnItem
 end
 
 return TowerItem

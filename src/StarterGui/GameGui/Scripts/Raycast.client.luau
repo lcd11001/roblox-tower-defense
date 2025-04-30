@@ -6,14 +6,22 @@ local highlightingItems = {}
 
 local TowerItem = require(script.Parent.TowerItem)
 
-local function MouseRaycast(): RaycastResult
+local function MouseRaycast(blacklist: { Instance }): RaycastResult
     local mousePosition: Vector2 = UserInputService:GetMouseLocation()
     -- print("Mouse position:", mousePosition)
 
     local ray: Ray = camera:ViewportPointToRay(mousePosition.X, mousePosition.Y)
     -- print("Ray:", ray)
 
-    local result: RaycastResult = workspace:Raycast(ray.Origin, ray.Direction * 1000)
+    if blacklist == nil then
+        blacklist = {}
+    end
+    local raycastParams: RaycastParams = RaycastParams.new()
+    -- raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+    raycastParams.FilterType = Enum.RaycastFilterType.Exclude
+    raycastParams.FilterDescendantsInstances = blacklist
+
+    local result: RaycastResult = workspace:Raycast(ray.Origin, ray.Direction * 1000, raycastParams)
     return result
 end
 
@@ -39,7 +47,7 @@ end
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if not gameProcessed then
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            local result: RaycastResult = MouseRaycast()
+            local result: RaycastResult = MouseRaycast({ TowerItem.GetSpawnItem() })
             if result and result.Instance then
                 local item = result.Instance
                 print("Hit object:", item.Name)
@@ -53,23 +61,29 @@ end)
 
 -- Connect the function to the RenderStepped event
 RunService.RenderStepped:Connect(function()
-    local item: Model = TowerItem.GetItem()
+    local item: Model = TowerItem.GetSpawnItem()
     if not item then
         return
     end
 
-    local result: RaycastResult = MouseRaycast()
+    local result: RaycastResult = MouseRaycast({ item })
     if result and result.Instance then
         -- print("Hit object:", result.Instance.Name)
         local x = result.Position.X
         local y = result.Position.Y
         local z = result.Position.Z
 
-        local humanoid: Humanoid = item:FindFirstChildOfClass("Humanoid")
-        if humanoid then
-            z += humanoid.HipHeight
-        end
+        -- Option 1: Using Humanoid.HipHeight
+        -- local humanoid: Humanoid = item:FindFirstChildOfClass("Humanoid")
+        -- if humanoid then
+        --     y += humanoid.HipHeight
+        -- end
+
+        -- Option 2: Using bounding box (if no Humanoid)
+        local extents = item:GetExtentsSize()
+        y += (extents.Y * 0.5)
+
+        -- item:SetPrimaryPartCFrame(CFrame.new(x, y, z))
         item:PivotTo(CFrame.new(x, y, z))
     end
 end)
-

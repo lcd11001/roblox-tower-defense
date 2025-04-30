@@ -7,7 +7,6 @@ local gui = script.Parent.Parent
 local slingerButton: TextButton = gui:FindFirstChild("SlingerButton", true)
 
 local towerFolder: Folder = workspace:FindFirstChild("Towers")
-local towerItem: Model = nil
 
 local function SpawnTower(name: string): Model | nil
     local tower = Prefabs:FindFirstChild(name)
@@ -17,15 +16,15 @@ local function SpawnTower(name: string): Model | nil
 
         return clonedTower
     else
-        warn("Tower " .. name .. " not found in ServerStorage.Towers")
+        warn("Tower " .. name .. " not found in ReplicatedStorage.Prefabs")
     end
     return nil
 end
 
 local function AddPlaceholderTower(name: string)
-    towerItem = SpawnTower(name)
+    local towerItem: Model = SpawnTower(name)
     if towerItem then
-        TowerItem.SetItem(towerItem)
+        TowerItem.SetSpawnItem(towerItem)
     end
 end
 
