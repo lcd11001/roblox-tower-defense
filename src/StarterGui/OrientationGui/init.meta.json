@@ -3,6 +3,7 @@
     "ignoreUnknownInstances": false,
     "properties": {
         "IgnoreGuiInset": true,
-        "ResetOnSpawn": false
+        "ResetOnSpawn": false,
+        "Enabled": false
     }
 }
