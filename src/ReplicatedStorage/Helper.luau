@@ -36,7 +36,7 @@ function Helper.AttachScript(part: Instance, script: Script)
     if part and script then
         local newScript = script:Clone()
         newScript.Parent = part
-        print(script.Name .. " attached to " .. part.Name .. "!")
+        -- print(script.Name .. " attached to " .. part.Name .. "!")
     elseif not part then
         warn("invalid part!")
     elseif not script then

@@ -3,8 +3,7 @@ local TowerConfig = require(ServerScriptService.Configs.TowerConfig)
 
 local config = TowerConfig.GetConfig("1")
 
-local Towers: Folder = script.Parent
-local tower: Model = Towers:WaitForChild("Tower")
+local tower: Model = script.Parent
 
 local mobs = workspace:WaitForChild("Mobs")
 
@@ -30,6 +29,8 @@ local function TakeDamage(target: BasePart): number
         humanoid:TakeDamage(config.Damage)
         -- print(target.Name .. " took " .. config.Damage .. " damage. Current health is " .. humanoid.Health)
         return config.Damage
+    else
+        warn("No humanoid found in target: " .. target.Name)
     end
     return 0
 end

@@ -1,4 +1,6 @@
+local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
 local Helper = require(ReplicatedStorage:WaitForChild("Helper"))
 
 local Events: Folder = ReplicatedStorage:WaitForChild("Events")
@@ -19,6 +21,7 @@ function Tower.Spawn(player: Player, name: string, pivot: CFrame): Model | nil
         clonedTower:PivotTo(pivot)
 
         Helper.SetColisionGroup(clonedTower, "Tower", false)
+        Helper.AttachScriptFromStorage(clonedTower, "TowerDamage", ServerStorage.Tower)
 
         return clonedTower
     else
