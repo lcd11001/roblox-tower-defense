@@ -13,6 +13,26 @@ function TowerItem.GetSpawnItem(): Model | nil
     return spawnItem
 end
 
+local function GetClosestPointOnPath(spawnPos: Vector3, path: BasePart): Vector3
+	local pathPos = path.Position
+	local size = path.Size
+	local cframe = path.CFrame
+
+	local forward
+	local halfLength
+	if size.X > size.Z then
+		forward = cframe.RightVector
+		halfLength = size.X / 2
+	else
+		forward = cframe.LookVector
+		halfLength = size.Z / 2
+	end
+
+	local toSpawn = spawnPos - pathPos
+	local dot = math.clamp(toSpawn:Dot(forward), -halfLength, halfLength)
+	return pathPos + forward * dot
+end
+
 local function FindClosetPath(): BasePart | nil
     if spawnItem then
         local spawnItemPos = spawnItem:GetPivot().Position
@@ -25,26 +45,7 @@ local function FindClosetPath(): BasePart | nil
             -- This fails for long rail segments, because the part's .Position is its center, not the closest point on the rail's surface or axis
             -- local distance: number = (spawnItem:GetPivot().Position - path.Position).Magnitude
 
-            local pathPos = path.Position
-            local pathCFrame = path.CFrame
-            local pathSize = path.Size
-
-            -- determine direction of long axis
-            local forward
-            local halfLenght
-
-            if pathSize.X > pathSize.Z then
-                forward = pathCFrame.RightVector
-                halfLenght = pathSize.X / 2
-            else
-                forward = pathCFrame.LookVector
-                halfLenght = pathSize.Z / 2
-            end
-
-            -- project spawnItem position onto the path's long axis
-            local toSpawnItem = spawnItemPos - pathPos
-            local dot = math.clamp(toSpawnItem:Dot(forward), -halfLenght, halfLenght)
-            local closestPoint = pathPos + (dot * forward)
+            local closestPoint = GetClosestPointOnPath(spawnItemPos, path)
 
             -- measure distance from spawnItem to closest point on path
             local distance = (spawnItemPos - closestPoint).Magnitude
@@ -76,7 +77,7 @@ function TowerItem.Perpendicular(itemPosition: Vector3)
 
             -- compute a perpendicular vector using cross product
             -- cross with up vector to get perpendicular horizontal vector
-            local up = Vector3.new(0, 1, 0)
+            local up = Vector3.yAxis
             local perpendicular = forward:Cross(up).Unit
 
             -- compute direction vector from item to path
