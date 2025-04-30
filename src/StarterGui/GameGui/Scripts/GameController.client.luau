@@ -1,5 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Prefabs = ReplicatedStorage:WaitForChild("Prefabs")
+
+local Prefabs: Folder = ReplicatedStorage:WaitForChild("Prefabs")
+
 local Helper = require(ReplicatedStorage:WaitForChild("Helper"))
 
 local TowerItem = require(script.Parent.TowerItem)

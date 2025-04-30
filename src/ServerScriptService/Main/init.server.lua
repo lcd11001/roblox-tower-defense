@@ -19,6 +19,8 @@ if not WaveConfig.GlobalSettings then
 end
 
 local Mob = require(script.Mob)
+-- register tower events from server
+local Tower = require(script.Tower)
 
 local mapName: string = "Grassland Map"
 local Map = workspace:WaitForChild(mapName)

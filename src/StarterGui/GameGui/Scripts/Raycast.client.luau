@@ -1,5 +1,9 @@
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Events: Folder = ReplicatedStorage:WaitForChild("Events")
+local spawnTowerEvent: RemoteEvent = Events:WaitForChild("SpawnTowerEvent")
 
 local camera = workspace.CurrentCamera
 local highlightingItems = {}
@@ -46,15 +50,24 @@ end
 
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if not gameProcessed then
+        -- if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        --     local result: RaycastResult = MouseRaycast({ TowerItem.GetSpawnItem() })
+        --     if result and result.Instance then
+        --         local item = result.Instance
+        --         print("Hit object:", item.Name)
+        --         if item:IsA("BasePart") then
+        --             HighlightPart(item)
+        --         end
+        --     end
+        -- end
+
+        local item: Model = TowerItem.GetSpawnItem()
+        if not item then
+            return
+        end
+
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            local result: RaycastResult = MouseRaycast({ TowerItem.GetSpawnItem() })
-            if result and result.Instance then
-                local item = result.Instance
-                print("Hit object:", item.Name)
-                if item:IsA("BasePart") then
-                    HighlightPart(item)
-                end
-            end
+            spawnTowerEvent:FireServer(item.Name, item:GetPivot().Position)
         end
     end
 end)
