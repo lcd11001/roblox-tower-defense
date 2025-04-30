@@ -55,7 +55,7 @@ local function FindClosetPath(): BasePart | nil
                 closestPath = path
             end
         end
-        print("Closest path found:", closestPath.Name)
+        -- print("Closest path found:", closestPath.Name)
         return closestPath
     end
     return nil
