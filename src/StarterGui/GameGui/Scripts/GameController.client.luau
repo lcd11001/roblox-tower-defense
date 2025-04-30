@@ -25,7 +25,7 @@ end
 local function AddPlaceholderTower(name: string)
     local towerItem: Model = SpawnTower(name)
     if towerItem then
-        Helper.SetColisionGroup(towerItem, "Tower")
+        Helper.SetColisionGroup(towerItem, "Tower", true)
         TowerItem.SetSpawnItem(towerItem)
     end
 end

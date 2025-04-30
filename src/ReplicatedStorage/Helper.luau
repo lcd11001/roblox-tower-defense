@@ -87,11 +87,15 @@ function Helper.AttachScriptFromPath(partPath, scriptPath)
 	Helper.AttachScript(part, script)
 end
 
-function Helper.SetColisionGroup(model: Model, groupName: string)
+function Helper.SetColisionGroup(model: Model, groupName: string, forceField: boolean?)
     for _, object in ipairs(model:GetDescendants()) do
         if object:IsA("BasePart") then
             -- physicsService:SetPartCollisionGroup(object, groupName)
             object.CollisionGroup = groupName
+
+			if forceField == true then
+				object.Material = Enum.Material.ForceField
+			end
         end
     end
 end
