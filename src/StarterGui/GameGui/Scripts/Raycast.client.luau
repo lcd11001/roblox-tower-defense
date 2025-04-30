@@ -2,6 +2,8 @@ local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local Helper: Script = require(ReplicatedStorage:WaitForChild("Helper"))
+
 local Events: Folder = ReplicatedStorage:WaitForChild("Events")
 local spawnTowerEvent: RemoteEvent = Events:WaitForChild("SpawnTowerEvent")
 
@@ -9,6 +11,7 @@ local camera = workspace.CurrentCamera
 local highlightingItems = {}
 
 local TowerItem = require(script.Parent.TowerItem)
+local canPlaceTower = false
 
 local function MouseRaycast(blacklist: { Instance }): RaycastResult
     local mousePosition: Vector2 = UserInputService:GetMouseLocation()
@@ -68,10 +71,12 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         end
 
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            spawnTowerEvent:FireServer(item.Name, item:GetPivot().Position)
-            -- destroy the placeholder item
-            item:Destroy()
-            TowerItem.SetSpawnItem(nil)
+            if canPlaceTower then
+                spawnTowerEvent:FireServer(item.Name, item:GetPivot().Position)
+                -- destroy the placeholder item
+                item:Destroy()
+                TowerItem.SetSpawnItem(nil)
+            end
         end
     end
 end)
@@ -89,6 +94,17 @@ RunService.RenderStepped:Connect(function()
         local x = result.Position.X
         local y = result.Position.Y
         local z = result.Position.Z
+        if result.Instance.Parent.Name == "TowerArea" then
+            if not canPlaceTower then
+                Helper.SetColor(item, Color3.fromRGB(0, 255, 0))
+                canPlaceTower = true
+            end
+        else
+            if canPlaceTower then
+                canPlaceTower = false
+                Helper.SetColor(item, Color3.fromRGB(255, 0, 0))
+            end
+        end
 
         local humanoid: Humanoid = item:FindFirstChildOfClass("Humanoid")
         if humanoid then
