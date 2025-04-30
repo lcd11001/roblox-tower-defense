@@ -20,6 +20,9 @@
       "$className": "StarterGui",
       "GameGui": {
         "$path": "src/StarterGui/GameGui"
+      },
+      "OrientationGui": {
+        "$path": "src/StarterGui/OrientationGui"
       }
     },
 
