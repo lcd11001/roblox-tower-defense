@@ -20,12 +20,17 @@ table.sort(waitpoints, function(a: Part, b: Part)
 end)
 
 -- move to each waitpoint
-for index=1, #waitpoints do
+local index = 1
+while index <= #waitpoints do
     local waitpoint: Part = waitpoints[index]
     if waitpoint:IsA("Part") then
         -- print("Moving to waitpoint: " .. waitpoint.Name)
         humanoid:MoveTo(waitpoint.Position)
-        humanoid.MoveToFinished:Wait()
+        local success = humanoid.MoveToFinished:Wait()
+        if success then
+            -- fixed: zombie will not move to the long rail path correctly
+            index += 1
+        end
     end
 end
 
