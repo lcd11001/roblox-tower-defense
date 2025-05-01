@@ -64,10 +64,6 @@
         "$path": "src/Workspace/Mobs",
         "$className": "Folder"
       },
-      "Tower": {
-        "$path": "src/Workspace/Tower",
-        "$className": "Model"
-      },
       "Towers": {
         "$path": "src/Workspace/Towers",
         "$className": "Folder"
