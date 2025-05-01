@@ -3,7 +3,7 @@ local Module = {}
 function Module.SetAnimation(model: Model, animName: string): AnimationTrack
     local humanoid: Humanoid = model:FindFirstChildOfClass("Humanoid")
     if not humanoid then
-        error("Humanoid not found in model " .. model.Name)
+        warn("Humanoid not found in model " .. model.Name)
         return nil
     end
 
@@ -16,19 +16,19 @@ function Module.SetAnimation(model: Model, animName: string): AnimationTrack
 
     local animations: Configuration = model:FindFirstChild("Animations")
     if not animations then
-        error("Animations not found in model " .. model.Name)
+        warn("Animations not found in model " .. model.Name)
         return nil
     end
 
     local animation: Animation = animations:FindFirstChild(animName)
     if not animation then
-        error(animName .. " animation not found in model " .. model.Name)
+        warn(animName .. " animation not found in model " .. model.Name)
         return nil
     end
 
     local animationTrack: AnimationTrack = animator:LoadAnimation(animation)
     if not animationTrack then
-        error("Failed to load animation " .. animName .. " for model " .. model.Name)
+        warn("Failed to load animation " .. animName .. " for model " .. model.Name)
         return nil
     end
 

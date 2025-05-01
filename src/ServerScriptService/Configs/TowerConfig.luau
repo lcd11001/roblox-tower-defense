@@ -1,8 +1,8 @@
 local TowerConfig = {
     Levels = {
         ["1"] = {
-            MaxRange = 20,
-            Damage = 50,
+            MaxRange = 10,
+            Damage = 20,
             AttackSpeed = 1,
             Cost = 100,
             UpgradeCost = 50,
