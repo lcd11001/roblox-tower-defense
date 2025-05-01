@@ -7,12 +7,15 @@ local tower: Model = script.Parent
 
 local mobs = workspace:WaitForChild("Mobs")
 
-local function FindNearestTarget(): BasePart | nil
+local function FindNearestTarget(newTower: Model): BasePart | nil
     local maxDistance = config.MaxRange
     local nearestTarget = nil
 
+    -- if tower has no humanoid root part, use the pivot
+    local towerPosition = newTower:FindFirstChildWhichIsA("HumanoidRootPart") ~= nil and newTower.HumanoidRootPart.Position or newTower:GetPivot().Position
+
     for _, target in ipairs(mobs:GetChildren()) do
-        local distance = (tower:GetPivot().Position - target.HumanoidRootPart.Position).Magnitude
+        local distance = (towerPosition - target.HumanoidRootPart.Position).Magnitude
         -- print("Distance between tower and mob: " .. target.Name .. " is " .. distance)
         if distance < maxDistance then
             -- print(target.Name .. " is within range of the tower.")
@@ -35,8 +38,8 @@ local function TakeDamage(target: BasePart): number
     return 0
 end
 
-while true do
-    local target = FindNearestTarget()
+local function Attack(newTower: Model)
+    local target = FindNearestTarget(newTower)
     if target then
         -- print("Target found: " .. target.Name)
         -- Add your attack logic here
@@ -44,4 +47,14 @@ while true do
     end
 
     task.wait(config.AttackSpeed) -- Adjust the wait time as needed
+
+    -- recursively call the function to keep attacking
+    Attack(newTower)
 end
+
+-- while true do
+--     Attack(tower)
+-- end
+
+-- Use a coroutine to avoid blocking the main thread
+coroutine.wrap(Attack)(tower)
