@@ -21,7 +21,7 @@ function Tower.Spawn(player: Player, name: string, pivot: CFrame): Model | nil
         clonedTower:PivotTo(pivot)
 
         Helper.SetColisionGroup(clonedTower, "Tower", false)
-        Helper.AttachScriptFromStorage(clonedTower, "TowerDamage", ServerStorage.Tower)
+        Helper.AttachScriptFromStorage(clonedTower, "Damage", ServerStorage.Tower)
 
         return clonedTower
     else

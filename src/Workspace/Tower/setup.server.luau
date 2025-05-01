@@ -6,4 +6,4 @@ local ServerStorage = game:GetService("ServerStorage")
 local Helper = require(ReplicatedStorage:WaitForChild("Helper"))
 
 local tower = script.Parent
-Helper.AttachScriptFromStorage(tower, "TowerDamage", ServerStorage.Tower)
+Helper.AttachScriptFromStorage(tower, "Damage", ServerStorage.Tower)
