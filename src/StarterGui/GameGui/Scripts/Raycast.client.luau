@@ -1,8 +1,14 @@
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local LocalPlayer: Player = Players.LocalPlayer
 
 local Helper: Script = require(ReplicatedStorage:WaitForChild("Helper"))
+
+-- Wait for the ControlModule to be available
+local playerModule: PlayerModule = require(LocalPlayer:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule"))
+local controlModule: ControlModule = playerModule:GetControls()
 
 local Events: Folder = ReplicatedStorage:WaitForChild("Events")
 local spawnTowerEvent: RemoteEvent = Events:WaitForChild("SpawnTowerEvent")
@@ -14,6 +20,20 @@ local TowerItem = require(script.Parent.TowerItem)
 local canPlaceTower = false
 local rotationPlaceTower = 0
 
+local function GetRaycastResult(
+    origin: Vector3,
+    direction: Vector3,
+    blacklist: { Instance },
+    distance: number
+): RaycastResult
+    local raycastParams: RaycastParams = RaycastParams.new()
+    raycastParams.FilterType = Enum.RaycastFilterType.Exclude
+    raycastParams.FilterDescendantsInstances = blacklist or {}
+
+    local result: RaycastResult = workspace:Raycast(origin, direction * (distance or 1000), raycastParams)
+    return result
+end
+
 local function MouseRaycast(blacklist: { Instance }): RaycastResult
     local mousePosition: Vector2 = UserInputService:GetMouseLocation()
     -- print("Mouse position:", mousePosition)
@@ -21,16 +41,22 @@ local function MouseRaycast(blacklist: { Instance }): RaycastResult
     local ray: Ray = camera:ViewportPointToRay(mousePosition.X, mousePosition.Y)
     -- print("Ray:", ray)
 
-    if blacklist == nil then
-        blacklist = {}
-    end
-    local raycastParams: RaycastParams = RaycastParams.new()
-    -- raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
-    raycastParams.FilterType = Enum.RaycastFilterType.Exclude
-    raycastParams.FilterDescendantsInstances = blacklist
+    return GetRaycastResult(ray.Origin, ray.Direction, blacklist, 1000)
+end
 
-    local result: RaycastResult = workspace:Raycast(ray.Origin, ray.Direction * 1000, raycastParams)
-    return result
+local function MobileRaycast(blacklist: { Instance }): RaycastResult
+    local moveVector: Vector3 = controlModule:GetMoveVector()
+    print("Move vector:", moveVector)
+
+    return nil
+end
+
+local function GetRaycast(blacklist: { Instance }): RaycastResult
+    if Helper.IsMobile() then
+        return MobileRaycast(blacklist)
+    else
+        return MouseRaycast(blacklist)
+    end
 end
 
 local function HighlightPart(part: BasePart)
@@ -89,7 +115,7 @@ RunService.RenderStepped:Connect(function()
         return
     end
 
-    local result: RaycastResult = MouseRaycast({ item })
+    local result: RaycastResult = GetRaycast({ item })
     if result and result.Instance then
         -- print("Hit object:", result.Instance.Name)
         local x = result.Position.X

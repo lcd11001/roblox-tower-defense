@@ -1,11 +1,12 @@
 local Helper = {}
 
 -- Roblox doesn't have a built-in global variable like 'workspace', so we need to define it
-local replicatedStorage = game:GetService("ReplicatedStorage") -- Define replicatedStorage
-local serverStorage = game:GetService("ServerStorage") -- Define serverStorage
-local starterGui = game:GetService("StarterGui") -- Define starterGui
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local serverStorage = game:GetService("ServerStorage")
+local starterGui = game:GetService("StarterGui")
 local starterPack = game:GetService("StarterPack")
--- local physicsService = game:GetService("PhysicsService") -- Define physicsService
+local userInputService = game:GetService("UserInputService")
+-- local physicsService = game:GetService("PhysicsService")
 
 local function DetectRoot(root: string)
     if root == "Workspace" then
@@ -115,6 +116,10 @@ function Helper.SetColor(model: Model, color: Color3)
             object.Color = color
         end
     end
+end
+
+function Helper.IsMobile(): boolean
+    return userInputService.TouchEnabled and not userInputService.MouseEnabled
 end
 
 return Helper
