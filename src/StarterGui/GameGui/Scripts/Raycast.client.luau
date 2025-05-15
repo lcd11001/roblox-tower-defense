@@ -45,10 +45,17 @@ local function MouseRaycast(blacklist: { Instance }): RaycastResult
 end
 
 local function MobileRaycast(blacklist: { Instance }): RaycastResult
-    local moveVector: Vector3 = controlModule:GetMoveVector()
-    print("Move vector:", moveVector)
+    -- local moveVector: Vector3 = controlModule:GetMoveVector()
+    -- print("Move vector:", moveVector)
 
-    return nil
+    -- return nil
+    local item: Model = TowerItem.GetSpawnItem()
+    if not item then
+        return nil
+    end
+
+    local itemPosition: Vector3 = item:GetPivot().Position
+    return GetRaycastResult(itemPosition, Vector3.new(0, -1, 0), blacklist, 1000)
 end
 
 local function GetRaycast(blacklist: { Instance }): RaycastResult
@@ -56,6 +63,21 @@ local function GetRaycast(blacklist: { Instance }): RaycastResult
         return MobileRaycast(blacklist)
     else
         return MouseRaycast(blacklist)
+    end
+end
+
+local function PlaceTower()
+    local item: Model = TowerItem.GetSpawnItem()
+    if item == nil then
+        -- print("No item to spawn")
+        return
+    end
+
+    if canPlaceTower then
+        spawnTowerEvent:FireServer(item.Name, item:GetPivot())
+        -- destroy the placeholder item
+        item:Destroy()
+        TowerItem.SetSpawnItem(nil)
     end
 end
 
@@ -91,20 +113,16 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         --     end
         -- end
 
-        local item: Model = TowerItem.GetSpawnItem()
-        if item == nil then
-            -- print("No item to spawn")
-            return
-        end
-
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            if canPlaceTower then
-                spawnTowerEvent:FireServer(item.Name, item:GetPivot())
-                -- destroy the placeholder item
-                item:Destroy()
-                TowerItem.SetSpawnItem(nil)
-            end
+            PlaceTower()
         end
+    end
+end)
+
+UserInputService.JumpRequest:Connect(function()
+    print("JumpRequest")
+    if Helper.IsMobile() then
+        PlaceTower()
     end
 end)
 
@@ -113,6 +131,16 @@ RunService.RenderStepped:Connect(function()
     local item: Model = TowerItem.GetSpawnItem()
     if not item then
         return
+    end
+
+    if Helper.IsMobile() then
+        -- print("Mobile mode")
+        local moveVector: Vector3 = controlModule:GetMoveVector()
+        if moveVector.Magnitude > 0 then
+            local currentPos: Vector3 = item.PrimaryPart.Position
+            local newPos = currentPos + moveVector.Unit * 0.2
+            item:PivotTo(CFrame.new(newPos))
+        end
     end
 
     local result: RaycastResult = GetRaycast({ item })

@@ -118,6 +118,24 @@ function Helper.SetColor(model: Model, color: Color3)
     end
 end
 
+function Helper.Hide(model: Model)
+    for _, object in ipairs(model:GetDescendants()) do
+        if object:IsA("BasePart") and object.Name ~= "HumanoidRootPart" then
+            object.Transparency = 1
+            object.CanCollide = false
+        end
+    end
+end
+
+function Helper.Show(model: Model)
+    for _, object in ipairs(model:GetDescendants()) do
+        if object:IsA("BasePart") and object.Name ~= "HumanoidRootPart" then
+            object.Transparency = 0
+            object.CanCollide = true
+        end
+    end
+end
+
 function Helper.IsMobile(): boolean
     return userInputService.TouchEnabled and not userInputService.MouseEnabled
 end

@@ -8,7 +8,6 @@ local Helper = require(ReplicatedStorage:WaitForChild("Helper"))
 
 local TowerItem = require(script.Parent.TowerItem)
 
-
 local gui = script.Parent.Parent
 local slingerButton: TextButton = gui:FindFirstChild("SlingerButton", true)
 
@@ -25,6 +24,15 @@ local function SpawnTower(name: string): Model | nil
         local clonedTower = tower:Clone()
         -- clonedTower.Parent = towerFolder
         clonedTower.Parent = workspace
+
+        if isMobilePlacementModeActive then
+            -- set the tower to player character position
+            local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+            local lookVector = humanoidRootPart.CFrame.LookVector
+            local towerPosition = humanoidRootPart.Position + (lookVector * 5) -- Adjust the offset as needed
+            clonedTower:SetPrimaryPartCFrame(CFrame.new(towerPosition))
+        end
 
         return clonedTower
     else
@@ -53,13 +61,17 @@ local function ToggleMobilePlacementMode(activate: boolean)
         -- disable movement of the player
         local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
         character.HumanoidRootPart.Anchored = true
+        Helper.Hide(character)
+        -- character.Parent = nil -- remove the character from the workspace
 
         slingerButton.Text = PLACE_HOLDER_BUTTON_TITLE
     else
         -- enable movement of the player
         local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
         character.HumanoidRootPart.Anchored = false
-        
+        Helper.Show(character)
+        -- character.Parent = workspace
+
         slingerButton.Text = SLINGER_BUTTON_TITLE
     end
 end
@@ -74,7 +86,10 @@ slingerButton.Activated:Connect(function()
     if Helper.IsMobile() then
         -- print("Mobile placement mode activated")
         ToggleMobilePlacementMode(not isMobilePlacementModeActive)
+        if isMobilePlacementModeActive then
+            AddPlaceholderTower("Slinger")
+        end
+    else
+        AddPlaceholderTower("Slinger")
     end
-
-    AddPlaceholderTower("Slinger")
 end)
