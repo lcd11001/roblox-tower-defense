@@ -110,6 +110,40 @@ function Helper.SetColisionGroup(model: Model, groupName: string, forceField: bo
     end
 end
 
+function Helper.SetAlignOrientation(root: Instance, name: string?, target: Instance?)
+    local attachment = Instance.new("Attachment")
+    attachment.Parent = root
+    attachment.Name = "AlignOrientationAttachment"
+
+    local alignOrientation = Instance.new("AlignOrientation")
+    alignOrientation.Name = name or "AlignOrientation"
+    alignOrientation.Mode = target ~= nil and Enum.OrientationAlignmentMode.TwoAttachment
+        or Enum.OrientationAlignmentMode.OneAttachment
+    alignOrientation.MaxTorque = 100000
+    alignOrientation.Responsiveness = 200
+    alignOrientation.Attachment0 = attachment
+    if target then
+        if target:IsA("Attachment") then
+            alignOrientation.Attachment1 = target
+        else
+            local targetAttachment = target:FindFirstChild("AlignOrientationAttachment")
+            if targetAttachment then
+                alignOrientation.Attachment1 = targetAttachment
+            else
+                warn("Target does not have an AlignOrientationAttachment. Creating one.")
+                -- Create a new attachment if it doesn't exist
+                targetAttachment = Instance.new("Attachment")
+                targetAttachment.Name = "AlignOrientationAttachment"
+                targetAttachment.Parent = target
+                alignOrientation.Attachment1 = targetAttachment
+            end
+        end
+    else
+        alignOrientation.Attachment1 = nil
+    end
+    alignOrientation.Parent = root
+end
+
 function Helper.SetColor(model: Model, color: Color3)
     for _, object in ipairs(model:GetDescendants()) do
         if object:IsA("BasePart") then

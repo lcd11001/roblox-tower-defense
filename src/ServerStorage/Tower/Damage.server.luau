@@ -121,7 +121,14 @@ local function Attack(tower: Model)
         -- Add your attack logic here
 
         local targetCFrame = CFrame.lookAt(tower:GetPivot().Position, target:GetPivot().Position)
-        tower.HumanoidRootPart.BodyGyro.CFrame = targetCFrame
+
+        -- BodyGyro is deprecated and should not be used for new work. Use AlignOrientation instead
+        -- tower.HumanoidRootPart.BodyGyro.CFrame = targetCFrame
+
+        local alignOrientation = tower.HumanoidRootPart:FindFirstChild("TowerAlignOrientation")
+        if alignOrientation then
+            alignOrientation.CFrame = targetCFrame
+        end
 
         TakeDamage(target)
         AnimateTowerEvent:FireAllClients("Attack", tower, target)
@@ -131,7 +138,14 @@ local function Attack(tower: Model)
             -- Rotate the tower to face the perpendicular direction
             local towerPosition = tower:GetPivot().Position
             local targetCFrame = CFrame.lookAt(towerPosition, towerPosition + Perpendicular)
-            tower.HumanoidRootPart.BodyGyro.CFrame = targetCFrame
+
+            -- BodyGyro is deprecated and should not be used for new work. Use AlignOrientation instead
+            -- tower.HumanoidRootPart.BodyGyro.CFrame = targetCFrame
+
+            local alignOrientation = tower.HumanoidRootPart:FindFirstChild("TowerAlignOrientation")
+            if alignOrientation then
+                alignOrientation.CFrame = targetCFrame
+            end
         end
 
         AnimateTowerEvent:FireAllClients("Idle", tower)

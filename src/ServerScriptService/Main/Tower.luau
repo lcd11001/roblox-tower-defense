@@ -22,12 +22,16 @@ function Tower.Spawn(player: Player, name: string, pivot: CFrame, perpendicular:
 
         clonedTower:SetAttribute("Perpendicular", perpendicular)
 
+        -- BodyGyro is deprecated and should not be used for new work. Use AlignOrientation instead
+        --[[
         local bodyGyro: BodyGyro = Instance.new("BodyGyro")
         bodyGyro.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
         bodyGyro.D = 0
         bodyGyro.CFrame = clonedTower.HumanoidRootPart.CFrame
         bodyGyro.Parent = clonedTower.HumanoidRootPart
+        ]]
 
+        Helper.SetAlignOrientation(clonedTower.HumanoidRootPart, "TowerAlignOrientation", nil)
         Helper.SetColisionGroup(clonedTower, "Tower", false)
         Helper.AttachScriptFromStorage(clonedTower, "Damage", ServerStorage.Tower)
 
