@@ -61,6 +61,21 @@ local function IsFrontView(tower: Model, target: BasePart, startAngleDeg: number
     return startAngleDeg <= signedAngleDeg and signedAngleDeg <= endAngleDeg
 end
 
+local function IsValidTarget(target: PVInstance): boolean
+    -- A PVInstance ("Position Velocity Instance") is a base class for many Roblox objects, including BasePart and Model.
+    if not target or not target:IsA("PVInstance") then
+        return false
+    end
+
+    -- Check if the target is a humanoid or has a humanoid
+    local humanoid = target:FindFirstChildOfClass("Humanoid")
+    if humanoid and humanoid.Health > 0 then
+        return true
+    end
+
+    return false
+end
+
 local function FindNearestTarget(tower: Model): BasePart | nil
     local maxDistance = config.MaxRange
     local nearestTarget = nil
@@ -68,6 +83,11 @@ local function FindNearestTarget(tower: Model): BasePart | nil
     for _, target in ipairs(mobs:GetChildren()) do
         if not IsFrontView(tower, target, -75, 75) then
             -- print(target.Name .. " is not in front of the tower.")
+            continue
+        end
+
+        if not IsValidTarget(target) then
+            print(target.Name .. " is not a valid target.")
             continue
         end
 
