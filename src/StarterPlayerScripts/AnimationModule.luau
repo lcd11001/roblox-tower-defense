@@ -45,7 +45,7 @@ function Module.PlayAnimation(model: Model, animName: string, loop: boolean?)
         animationTrack.Looped = loop
     end
 
-    task.wait(0.5) -- Wait for the model to be fully loaded
+    -- task.wait(0.5) -- Wait for the model to be fully loaded
 
     animationTrack:Play()
 end
