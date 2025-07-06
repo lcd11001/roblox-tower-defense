@@ -38,7 +38,7 @@ local function PlaceTower()
     end
 
     if canPlaceTower then
-        spawnTowerEvent:FireServer(item.Name, item:GetPivot())
+        spawnTowerEvent:FireServer(item.Name, item:GetPivot(), item:GetAttribute("Perpendicular"))
         -- destroy the placeholder item
         item:Destroy()
         TowerItem.SetSpawnItem(nil)
@@ -111,6 +111,9 @@ RunService.RenderStepped:Connect(function()
         end
 
         item:PivotTo(CFrame.new(x, y, z))
-        TowerItem.Perpendicular(item:GetPivot().Position)
+        local perpendicular = TowerItem.Perpendicular(item:GetPivot().Position)
+        if perpendicular then
+            item:SetAttribute("Perpendicular", perpendicular)
+        end
     end
 end)

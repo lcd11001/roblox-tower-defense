@@ -14,23 +14,23 @@ function TowerItem.GetSpawnItem(): Model | nil
 end
 
 local function GetClosestPointOnPath(spawnPos: Vector3, path: BasePart): Vector3
-	local pathPos = path.Position
-	local size = path.Size
-	local cframe = path.CFrame
+    local pathPos = path.Position
+    local size = path.Size
+    local cframe = path.CFrame
 
-	local forward
-	local halfLength
-	if size.X > size.Z then
-		forward = cframe.RightVector
-		halfLength = size.X / 2
-	else
-		forward = cframe.LookVector
-		halfLength = size.Z / 2
-	end
+    local forward
+    local halfLength
+    if size.X > size.Z then
+        forward = cframe.RightVector
+        halfLength = size.X / 2
+    else
+        forward = cframe.LookVector
+        halfLength = size.Z / 2
+    end
 
-	local toSpawn = spawnPos - pathPos
-	local dot = math.clamp(toSpawn:Dot(forward), -halfLength, halfLength)
-	return pathPos + forward * dot
+    local toSpawn = spawnPos - pathPos
+    local dot = math.clamp(toSpawn:Dot(forward), -halfLength, halfLength)
+    return pathPos + forward * dot
 end
 
 local function FindClosetPath(): BasePart | nil
@@ -61,7 +61,7 @@ local function FindClosetPath(): BasePart | nil
     return nil
 end
 
-function TowerItem.Perpendicular(itemPosition: Vector3)
+function TowerItem.Perpendicular(itemPosition: Vector3): Vector3 | nil
     if spawnItem then
         local closestPath: BasePart | nil = FindClosetPath()
         if closestPath then
@@ -92,10 +92,14 @@ function TowerItem.Perpendicular(itemPosition: Vector3)
             local newCFrame = CFrame.lookAt(itemPosition, itemPosition + perpendicular, up)
             -- spawnItem:SetPrimaryPartCFrame(newCFrame)
             spawnItem:PivotTo(newCFrame)
+
+            return perpendicular
         else
             warn("No path found for rotation")
         end
     end
+
+    return nil
 end
 
 return TowerItem
