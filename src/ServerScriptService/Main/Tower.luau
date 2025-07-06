@@ -12,13 +12,21 @@ local Tower = {}
 
 local towerFolder: Folder = workspace:FindFirstChild("Towers")
 
-function Tower.Spawn(player: Player, name: string, pivot: CFrame): Model | nil
+function Tower.Spawn(player: Player, name: string, pivot: CFrame, perpendicular: Vector3): Model | nil
     local tower = Prefabs:FindFirstChild(name)
     if tower then
         local clonedTower: Model = tower:Clone()
         clonedTower.Parent = towerFolder
         clonedTower.HumanoidRootPart:SetNetworkOwner(nil)
         clonedTower:PivotTo(pivot)
+
+        clonedTower:SetAttribute("Perpendicular", perpendicular)
+
+        local bodyGyro: BodyGyro = Instance.new("BodyGyro")
+        bodyGyro.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
+        bodyGyro.D = 0
+        bodyGyro.CFrame = clonedTower.HumanoidRootPart.CFrame
+        bodyGyro.Parent = clonedTower.HumanoidRootPart
 
         Helper.SetColisionGroup(clonedTower, "Tower", false)
         Helper.AttachScriptFromStorage(clonedTower, "Damage", ServerStorage.Tower)

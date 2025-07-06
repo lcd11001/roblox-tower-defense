@@ -81,13 +81,13 @@ local function FindNearestTarget(tower: Model): BasePart | nil
     local nearestTarget = nil
 
     for _, target in ipairs(mobs:GetChildren()) do
-        if not IsFrontView(tower, target, -75, 75) then
+        if not IsFrontView(tower, target, -90, 90) then
             -- print(target.Name .. " is not in front of the tower.")
             continue
         end
 
         if not IsValidTarget(target) then
-            print(target.Name .. " is not a valid target.")
+            -- print(target.Name .. " is not a valid target.")
             continue
         end
 
@@ -119,9 +119,21 @@ local function Attack(tower: Model)
     if target then
         -- print("Target found: " .. target.Name)
         -- Add your attack logic here
+
+        local targetCFrame = CFrame.lookAt(tower:GetPivot().Position, target:GetPivot().Position)
+        tower.HumanoidRootPart.BodyGyro.CFrame = targetCFrame
+
         TakeDamage(target)
         AnimateTowerEvent:FireAllClients("Attack", tower, target)
     else
+        local Perpendicular = tower:GetAttribute("Perpendicular")
+        if Perpendicular then
+            -- Rotate the tower to face the perpendicular direction
+            local towerPosition = tower:GetPivot().Position
+            local targetCFrame = CFrame.lookAt(towerPosition, towerPosition + Perpendicular)
+            tower.HumanoidRootPart.BodyGyro.CFrame = targetCFrame
+        end
+
         AnimateTowerEvent:FireAllClients("Idle", tower)
     end
 
