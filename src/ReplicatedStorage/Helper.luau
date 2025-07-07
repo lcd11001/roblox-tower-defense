@@ -110,10 +110,23 @@ function Helper.SetColisionGroup(model: Model, groupName: string, forceField: bo
     end
 end
 
-function Helper.SetAlignOrientation(root: Instance, name: string?, target: Instance?)
+function Helper.SetAttachment(root: Instance, name: string?): Attachment
     local attachment = Instance.new("Attachment")
+    attachment.Name = name or "Attachment"
     attachment.Parent = root
-    attachment.Name = "AlignOrientationAttachment"
+
+    -- Set the attachment's position and orientation to match the root part
+    attachment.Position = Vector3.new(0, 0, 0)
+    attachment.Rotation = Vector3.new(0, 0, 0)
+
+    return attachment
+end
+
+function Helper.SetAlignOrientation(root: Instance, name: string?, target: Instance?)
+    -- local attachment = Instance.new("Attachment")
+    -- attachment.Parent = root
+    -- attachment.Name = "AlignOrientationAttachment"
+    local attachment = Helper.SetAttachment(root, name .. "Attachment")
 
     local alignOrientation = Instance.new("AlignOrientation")
     alignOrientation.Name = name or "AlignOrientation"

@@ -116,6 +116,9 @@ end
 
 local function Attack(tower: Model)
     local target = FindNearestTarget(tower)
+
+    local alignOrientation = tower.HumanoidRootPart:FindFirstChild("TowerAlignOrientation")
+
     if target then
         -- print("Target found: " .. target.Name)
         -- Add your attack logic here
@@ -125,7 +128,6 @@ local function Attack(tower: Model)
         -- BodyGyro is deprecated and should not be used for new work. Use AlignOrientation instead
         -- tower.HumanoidRootPart.BodyGyro.CFrame = targetCFrame
 
-        local alignOrientation = tower.HumanoidRootPart:FindFirstChild("TowerAlignOrientation")
         if alignOrientation then
             alignOrientation.CFrame = targetCFrame
         end
@@ -142,7 +144,6 @@ local function Attack(tower: Model)
             -- BodyGyro is deprecated and should not be used for new work. Use AlignOrientation instead
             -- tower.HumanoidRootPart.BodyGyro.CFrame = targetCFrame
 
-            local alignOrientation = tower.HumanoidRootPart:FindFirstChild("TowerAlignOrientation")
             if alignOrientation then
                 alignOrientation.CFrame = targetCFrame
             end

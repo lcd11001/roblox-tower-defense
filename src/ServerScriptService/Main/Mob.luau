@@ -57,6 +57,7 @@ function Mob.Spawn(name: string, map: Instance, scripts: { string }?)
         -- avoid glitches when player collides with the mob
         mob.HumanoidRootPart:SetNetworkOwner(nil)
 
+        Helper.SetAttachment(mob.HumanoidRootPart, "MobAlignOrientationAttachment")
         Helper.SetColisionGroup(mob, "Mob")
         Mob.InitAttributes(mob, map)
         Mob.AttachScripts(mob, scripts)
