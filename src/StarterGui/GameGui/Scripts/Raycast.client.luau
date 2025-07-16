@@ -110,8 +110,8 @@ RunService.RenderStepped:Connect(function()
             y += (extents.Y * 0.5)
         end
 
-        item:PivotTo(CFrame.new(x, y, z))
-        local perpendicular = TowerItem.Perpendicular(item:GetPivot().Position)
+        -- item:PivotTo(CFrame.new(x, y, z))
+        local perpendicular = TowerItem.Perpendicular(item, Vector3.new(x, y, z))
         if perpendicular then
             item:SetAttribute("Perpendicular", perpendicular)
         end

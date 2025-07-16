@@ -13,7 +13,7 @@ function TowerItem.GetSpawnItem(): Model | nil
     return spawnItem
 end
 
-local function GetClosestPointOnPath(spawnPos: Vector3, path: BasePart): Vector3
+function TowerItem.GetClosestPointOnPath(spawnPos: Vector3, path: BasePart): Vector3
     local pathPos = path.Position
     local size = path.Size
     local cframe = path.CFrame
@@ -33,9 +33,9 @@ local function GetClosestPointOnPath(spawnPos: Vector3, path: BasePart): Vector3
     return pathPos + forward * dot
 end
 
-local function FindClosetPath(): BasePart | nil
-    if spawnItem then
-        local spawnItemPos = spawnItem:GetPivot().Position
+function TowerItem.FindClosetPath(item: PVInstance): BasePart | nil
+    if item then
+        local spawnItemPos = item:GetPivot().Position
 
         local closestPath: BasePart = nil
         local closestDistance: number = math.huge
@@ -45,7 +45,7 @@ local function FindClosetPath(): BasePart | nil
             -- This fails for long rail segments, because the part's .Position is its center, not the closest point on the rail's surface or axis
             -- local distance: number = (spawnItem:GetPivot().Position - path.Position).Magnitude
 
-            local closestPoint = GetClosestPointOnPath(spawnItemPos, path)
+            local closestPoint = TowerItem.GetClosestPointOnPath(spawnItemPos, path)
 
             -- measure distance from spawnItem to closest point on path
             local distance = (spawnItemPos - closestPoint).Magnitude
@@ -61,9 +61,9 @@ local function FindClosetPath(): BasePart | nil
     return nil
 end
 
-function TowerItem.Perpendicular(itemPosition: Vector3): Vector3 | nil
-    if spawnItem then
-        local closestPath: BasePart | nil = FindClosetPath()
+function TowerItem.Perpendicular(item: PVInstance, itemPosition: Vector3): Vector3 | nil
+    if item then
+        local closestPath: BasePart | nil = TowerItem.FindClosetPath(item)
         if closestPath then
             local pathPosition = closestPath.Position
             local pathSize = closestPath.Size
@@ -90,8 +90,8 @@ function TowerItem.Perpendicular(itemPosition: Vector3): Vector3 | nil
 
             -- make a model look perpendicular to a closet long part
             local newCFrame = CFrame.lookAt(itemPosition, itemPosition + perpendicular, up)
-            -- spawnItem:SetPrimaryPartCFrame(newCFrame)
-            spawnItem:PivotTo(newCFrame)
+            -- item:SetPrimaryPartCFrame(newCFrame)
+            item:PivotTo(newCFrame)
 
             return perpendicular
         else
