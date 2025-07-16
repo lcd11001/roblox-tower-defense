@@ -1,13 +1,9 @@
 local Module = {}
 
 function Module.SetAnimation(model: Model, animName: string): AnimationTrack
-    local humanoid: Humanoid = model:FindFirstChildOfClass("Humanoid")
-    if not humanoid then
-        warn("Humanoid not found in model " .. model.Name)
-        return nil
-    end
+    local humanoid: Humanoid = model:WaitForChild("Humanoid")
 
-    local animator: Animator = humanoid:FindFirstChildOfClass("Animator")
+    local animator: Animator = humanoid:FindFirstChild("Animator")
     if not animator then
         animator = Instance.new("Animator")
         animator.Name = "Animator"
@@ -24,6 +20,15 @@ function Module.SetAnimation(model: Model, animName: string): AnimationTrack
     if not animation then
         warn(animName .. " animation not found in model " .. model.Name)
         return nil
+    end
+
+    -- Optimization: Check if the animation is already loaded
+    local playingTracks = animator:GetPlayingAnimationTracks()
+    for _, track in ipairs(playingTracks) do
+        -- print("Checking track: " .. track.Name)
+        if track.Name == animName then
+            return track -- Return the existing track if it's already loaded
+        end
     end
 
     local animationTrack: AnimationTrack = animator:LoadAnimation(animation)
