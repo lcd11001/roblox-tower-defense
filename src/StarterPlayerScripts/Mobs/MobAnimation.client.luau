@@ -1,5 +1,7 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
 -- Load AnimationModule script
-local AnimationModule: ModuleScript = require(script.Parent.Parent:WaitForChild("AnimationModule"))
+local AnimationModule: ModuleScript = require(ReplicatedStorage:WaitForChild("AnimationModule"))
 
 local Mobs: Folder = game.Workspace:WaitForChild("Mobs")
 

@@ -3,7 +3,7 @@ local Events: Folder = ReplicatedStorage:WaitForChild("Events")
 local AnimateTowerEvent: RemoteEvent = Events:WaitForChild("AnimateTowerEvent")
 
 -- Load AnimationModule script
-local AnimationModule: ModuleScript = require(script.Parent.Parent:WaitForChild("AnimationModule"))
+local AnimationModule: ModuleScript = require(ReplicatedStorage:WaitForChild("AnimationModule"))
 
 local Towers: Folder = game.Workspace:WaitForChild("Towers")
 
