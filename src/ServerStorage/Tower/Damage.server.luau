@@ -36,28 +36,28 @@ local function Attack(tower: Model)
         -- print("Target found: " .. target.Name)
         -- Add your attack logic here
 
-        local targetCFrame = CFrame.lookAt(tower:GetPivot().Position, target:GetPivot().Position)
-
-        -- BodyGyro is deprecated and should not be used for new work. Use AlignOrientation instead
-        -- tower.HumanoidRootPart.BodyGyro.CFrame = targetCFrame
-
         if alignOrientation then
+            local targetCFrame = CFrame.lookAt(tower:GetPivot().Position, target:GetPivot().Position)
+
+            -- BodyGyro is deprecated and should not be used for new work. Use AlignOrientation instead
+            -- tower.HumanoidRootPart.BodyGyro.CFrame = targetCFrame
+
             alignOrientation.CFrame = targetCFrame
         end
 
         TakeDamage(target)
         AnimateTowerEvent:FireAllClients("Attack", tower, target)
     else
-        local Perpendicular = tower:GetAttribute("Perpendicular")
-        if Perpendicular then
-            -- Rotate the tower to face the perpendicular direction
-            local towerPosition = tower:GetPivot().Position
-            local targetCFrame = CFrame.lookAt(towerPosition, towerPosition + Perpendicular)
+        if alignOrientation then
+            local Perpendicular = tower:GetAttribute("Perpendicular")
+            if Perpendicular then
+                -- Rotate the tower to face the perpendicular direction
+                local towerPosition = tower:GetPivot().Position
+                local targetCFrame = CFrame.lookAt(towerPosition, towerPosition + Perpendicular)
 
-            -- BodyGyro is deprecated and should not be used for new work. Use AlignOrientation instead
-            -- tower.HumanoidRootPart.BodyGyro.CFrame = targetCFrame
+                -- BodyGyro is deprecated and should not be used for new work. Use AlignOrientation instead
+                -- tower.HumanoidRootPart.BodyGyro.CFrame = targetCFrame
 
-            if alignOrientation then
                 alignOrientation.CFrame = targetCFrame
             end
         end
