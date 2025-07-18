@@ -2,21 +2,32 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local GuiBillboard = ReplicatedStorage:WaitForChild("GuiBillboard")
 local HealthBillboardGui = GuiBillboard:WaitForChild("HealthBillboardGui")
 
-local Base = {}
+local Events = ReplicatedStorage:WaitForChild("Events")
+local UpdateHealthEvent: RemoteEvent = Events:WaitForChild("UpdateHealthEvent")
 
-local mapName: string = "Grassland Map"
-local Map = workspace:WaitForChild(mapName)
-local Decor: Folder = Map:WaitForChild("Decor")
-local self = Decor:FindFirstChild("Base")
+local Base = {
+    Model = nil, -- This will be set when the base is set up
+    MaxHealth = 1000, -- Default health, can be overridden
+    CurrentHealth = 1000, -- Default health, can be overridden
+}
 
-function Base.createHealthBillboard()
+function Base.CreateHealthBillboard(parent: Instance)
     local billboard = HealthBillboardGui:Clone()
-    billboard.Parent = self
+    billboard.Parent = parent
     return billboard
 end
 
-function Base.Setup()
-    Base.createHealthBillboard()
+function Base.Setup(Map: Instance, health: number)
+    Base.Model = Map:FindFirstChild("Base")
+    Base.MaxHealth = health
+    Base.CurrentHealth = health / 2
+end
+
+function Base.UpdateHealth(damage: number)
+    Base.CurrentHealth = math.clamp(Base.CurrentHealth - damage, 0, Base.MaxHealth)
+    print("Base health updated: " .. Base.CurrentHealth .. "/" .. Base.MaxHealth)
+
+    UpdateHealthEvent:FireAllClients(Base.Model, Base.CurrentHealth, Base.MaxHealth)
 end
 
 return Base

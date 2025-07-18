@@ -21,12 +21,18 @@ end
 local Mob = require(script.Mob)
 -- register tower events from server
 local Tower = require(script.Tower)
--- register base events from server
 local Base = require(script.Base)
-Base.Setup()
 
 local mapName: string = "Grassland Map"
 local Map = workspace:WaitForChild(mapName)
+
+-- register base events from server
+Base.Setup(Map, 500)
+
+task.delay(5, function()
+    print("Server: simulate damage to base")
+    Base.UpdateHealth(50)
+end)
 
 -- local Mobs = Map:WaitForChild("Mobs")
 local Mobs = workspace:WaitForChild("Mobs")
