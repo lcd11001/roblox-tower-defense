@@ -19,7 +19,11 @@ local function onSetupHealthBillboard(instance, health, maxHealth)
         -- LocalScripts do not run automatically when they are descendants of parts in the Workspace.
         -- They only run when they are located in specific containers tied to the player, such as PlayerGui, StarterPlayerScripts, or the player's character.
         billboard.Parent = LocalPlayer:WaitForChild("PlayerGui") -- Parent to PlayerGui
-        billboard.Enabled = true -- Ensure the billboard is enabled
+
+        task.delay(0.1, function()
+            -- Fixed the flickering issue by ensuring the billboard is enabled after cloning
+            billboard.Enabled = true -- Ensure the billboard is enabled
+        end)
 
         local healthHelper = require(billboard:WaitForChild("LocalScript"):WaitForChild("HealthHelper"))
         healthHelper.UpdateHealth(health, maxHealth)
