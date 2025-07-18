@@ -20,13 +20,11 @@ end
 function Base.Setup(Map: Instance, health: number)
     Base.Model = Map:FindFirstChild("Base")
     Base.MaxHealth = health
-    Base.CurrentHealth = health / 2
+    Base.CurrentHealth = health
 end
 
 function Base.UpdateHealth(damage: number)
     Base.CurrentHealth = math.clamp(Base.CurrentHealth - damage, 0, Base.MaxHealth)
-    print("Base health updated: " .. Base.CurrentHealth .. "/" .. Base.MaxHealth)
-
     UpdateHealthEvent:FireAllClients(Base.Model, Base.CurrentHealth, Base.MaxHealth)
 end
 

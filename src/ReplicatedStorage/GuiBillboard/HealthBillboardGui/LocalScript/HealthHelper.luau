@@ -6,7 +6,7 @@ local CurrentHealth = gui:FindFirstChild("CurrentHealth", true)
 local HealthLabel = gui:FindFirstChild("HealthLabel", true)
 
 module.UpdateHealth = function(health, maxHealth)
-    print("GUI health updated: " .. health .. "/" .. maxHealth)
+    -- print("GUI health updated: " .. health .. "/" .. maxHealth)
 
     -- Ensure health is within bounds
     health = math.clamp(health, 0, maxHealth)
@@ -18,7 +18,7 @@ module.UpdateHealth = function(health, maxHealth)
 end
 
 module.UpdateHealthLabel = function(health, maxHealth)
-    print("GUI health label updated: " .. health .. "/" .. maxHealth)
+    -- print("GUI health label updated: " .. health .. "/" .. maxHealth)
 
     -- Update the health label
     if HealthLabel then

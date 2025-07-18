@@ -3,7 +3,7 @@
     "ignoreUnknownInstances": true,
     "properties": {
         "ResetOnSpawn": false,
-        "Enabled": true,
+        "Enabled": false,
         "Size": {
             "UDim2": [
                 [
