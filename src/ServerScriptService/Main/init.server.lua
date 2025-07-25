@@ -29,10 +29,10 @@ local Map = workspace:WaitForChild(mapName)
 -- register base events from server
 Base.Setup(Map, 500)
 
-task.delay(5, function()
-    print("Server: simulate damage to base")
-    Base.UpdateHealth(50)
-end)
+-- task.delay(5, function()
+--     print("Server: simulate damage to base")
+--     Base.UpdateHealth(50)
+-- end)
 
 -- local Mobs = Map:WaitForChild("Mobs")
 local Mobs = workspace:WaitForChild("Mobs")

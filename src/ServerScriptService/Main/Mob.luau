@@ -4,9 +4,15 @@ local totalMob = 0
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 -- local PhysicsService = game:GetService("PhysicsService")
 local ServerStorage = game:GetService("ServerStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
+
+local BindableEvents = ServerStorage:WaitForChild("BindableEvents")
+local BE_UpdateBaseHealth: BindableEvent = BindableEvents:WaitForChild("BE_UpdateBaseHealth")
 
 local Prefabs = ReplicatedStorage:WaitForChild("Prefabs")
 local Helper = require(ReplicatedStorage:WaitForChild("Helper"))
+
+local MobConfig = require(ServerScriptService:WaitForChild("Configs"):WaitForChild("MobConfig"))
 
 -- local mobParent: Folder = map:FindFirstChild("Mobs")
 local mobParent: Folder = workspace:FindFirstChild("Mobs")
@@ -59,7 +65,7 @@ function Mob.Spawn(name: string, map: Instance, scripts: { string }?)
 
         Helper.SetAttachment(mob.HumanoidRootPart, "MobAlignOrientationAttachment")
         Helper.SetColisionGroup(mob, "Mob")
-        Mob.InitAttributes(mob, map)
+        Mob.InitAttributes(mob, name, map)
         Mob.AttachScripts(mob, scripts)
         Mob.RegisterEvents(mob)
     else
@@ -84,9 +90,19 @@ function Mob.AttachScripts(mob: Model, scripts: { string }?)
     end
 end
 
-function Mob.InitAttributes(mob: Model, map: Instance)
+function Mob.InitAttributes(mob: Model, name: string, map: Instance)
     local mapName: string = map.Name
     mob:SetAttribute("Map", mapName)
+    
+    local humanoid: Humanoid = mob:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        humanoid.Health = MobConfig[name].Health -- Set initial health
+        humanoid.MaxHealth = MobConfig[name].Health -- Set max health
+        humanoid.WalkSpeed = MobConfig[name].Speed -- Set walk speed
+        humanoid:SetAttribute("Damage", MobConfig[name].Damage)
+    else
+        warn("Humanoid not found in model " .. mob.Name)
+    end
 end
 
 function Mob.RegisterEvents(mob: Model)
@@ -94,6 +110,14 @@ function Mob.RegisterEvents(mob: Model)
     if humanoid then
         humanoid.Died:Connect(function()
             Mob.OnMobDied(mob)
+        end)
+
+        humanoid.Destroying:Connect(function()
+            if humanoid.Health > 0 then
+                warn("mob damage to the base")
+                -- simulate damage to the base
+                BE_UpdateBaseHealth:Fire(humanoid:GetAttribute("Damage") or 0)
+            end
         end)
     else
         warn("Humanoid not found in model " .. mob.Name)
